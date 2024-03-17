@@ -41,8 +41,7 @@ model.compile(loss="sparse_categorical_crossentropy",
 
 model.fit(X_train,
           y_train,
-          epochs=10,
-          batch_size=200,
+          epochs=15,
           shuffle=True)
 
 model.evaluate(X_test, y_test)
