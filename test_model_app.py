@@ -1,11 +1,11 @@
 import tkinter as tk
 from PIL import Image, ImageDraw, ImageOps
 import numpy as np
-from keras.src.saving import load_model
+from keras.models import load_model
 
 # Load your trained model
 loaded_model = load_model("my_model.h5")  # Load your trained model here
-#TODO fix the app drawing
+
 class DigitRecognizerApp:
     def __init__(self, root):
         self.root = root
@@ -14,7 +14,7 @@ class DigitRecognizerApp:
         self.canvas = tk.Canvas(self.root, width=280, height=280, bg="black", highlightthickness=0)
         self.canvas.pack()
 
-        self.image = Image.new("L", (28, 28), "black")
+        self.image = Image.new("L", (280, 280), "black")  # Change size to 280x280
         self.draw = ImageDraw.Draw(self.image)
 
         self.canvas.bind("<B1-Motion>", self.draw_on_canvas)
@@ -42,7 +42,8 @@ class DigitRecognizerApp:
 
     def clear_canvas(self):
         self.canvas.delete("all")
-        self.draw.rectangle((0, 0, 28, 28), fill="black")
+        self.image = Image.new("L", (280, 280), "black")  # Reset image
+        self.draw = ImageDraw.Draw(self.image)
 
     def recognize_number(self):
         input_image = self.image.copy()
@@ -52,9 +53,9 @@ class DigitRecognizerApp:
 
     def draw_on_canvas(self, event):
         x, y = event.x, event.y
-        r = 5
-        self.canvas.create_rectangle(x - r, y - r, x + r, y + r, fill="white", outline="")
-        self.draw.rectangle([x/10 - r/10, y/10 - r/10, x/10 + r/10, y/10 + r/10], fill="white")
+        r = 10  # Increase the size of the drawn point
+        self.canvas.create_oval(x - r, y - r, x + r, y + r, fill="white", outline="")  # Use create_oval for smoother drawing
+        self.draw.rectangle([x - r, y - r, x + r, y + r], fill="white")
 
 def main():
     root = tk.Tk()
